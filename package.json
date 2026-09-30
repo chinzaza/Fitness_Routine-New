@@ -1,0 +1,23 @@
+{
+  "name": "fitness-routine",
+  "version": "1.0.0",
+  "description": "Workout Routine Catalog - ระบบจัดการตารางออกกำลังกาย (Node.js + Express + Vanilla JS)",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "keywords": [
+    "express",
+    "rest-api",
+    "crud",
+    "fitness",
+    "workout",
+    "fullstack"
+  ],
+  "author": "Fitness Routine Catalog",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

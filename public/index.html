@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workout Routine Catalog | คลังท่าออกกำลังกาย</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>" />
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ================= HEADER ================= -->
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-logo">💪</div>
+          <div class="brand-text">
+            <h1>Workout Routine Catalog</h1>
+            <p>ระบบจัดการตารางออกกำลังกาย &mdash; CRUD REST API</p>
+          </div>
+        </div>
+        <div class="header-stats">
+          <div class="stat-box">
+            <span class="stat-value" id="statTotal">0</span>
+            <span class="stat-label">ท่าทั้งหมด</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-value" id="statActive">0</span>
+            <span class="stat-label">กำลังใช้งาน</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+
+      <!-- ================= PRESETS SELECT ================= -->
+      <section class="panel panel-presets" id="presetPanel">
+        <div class="panel-head">
+          <h2>⚡ เลือกจากคลังท่าสำเร็จรูป (Presets)</h2>
+          <p class="panel-sub">คลิกท่าที่ต้องการ แล้วระบบจะเติมข้อมูลในฟอร์มให้อัตโนมัติทันที</p>
+        </div>
+        <div class="preset-bar">
+          <select id="presetSelect" class="control" aria-label="เลือกท่าสำเร็จรูป">
+            <option value="">-- เลือกท่าสำเร็จรูป --</option>
+          </select>
+          <button type="button" class="btn btn-ghost" id="btnLoadPreset">📥 เติมข้อมูลลงฟอร์ม</button>
+          <button type="button" class="btn btn-ghost" id="btnClearPreset">✖ ล้างฟอร์ม</button>
+        </div>
+        <div class="preset-chips" id="presetChips"></div>
+      </section>
+
+      <!-- ================= FORM ================= -->
+      <section class="panel" id="formPanel">
+        <div class="panel-head">
+          <h2 id="formTitle">➕ เพิ่มท่าออกกำลังกายใหม่</h2>
+          <p class="panel-sub" id="formSub">กรอกข้อมูลให้ครบทุกช่องที่มีเครื่องหมาย * แล้วกดบันทึก</p>
+        </div>
+
+        <form id="workoutForm" novalidate>
+          <input type="hidden" id="fieldId" />
+
+          <div class="form-grid">
+            <div class="form-group span-2">
+              <label for="fieldName">ชื่อท่า (name) <span class="req">*</span></label>
+              <input type="text" id="fieldName" name="name" class="control" placeholder="เช่น Push-up" autocomplete="off" />
+              <small class="error-msg" data-for="name"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldMuscle">กลุ่มกล้ามเนื้อ (muscle) <span class="req">*</span></label>
+              <select id="fieldMuscle" name="muscle" class="control">
+                <option value="">-- เลือกกลุ่มกล้ามเนื้อ --</option>
+                <option value="chest">Chest (อก)</option>
+                <option value="back">Back (หลัง)</option>
+                <option value="legs">Legs (ขา)</option>
+                <option value="core">Core (แกนกลางลำตัว)</option>
+                <option value="shoulders">Shoulders (ไหล่)</option>
+                <option value="arms">Arms (แขน)</option>
+                <option value="full-body">Full Body (ทั้งตัว)</option>
+              </select>
+              <small class="error-msg" data-for="muscle"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldLevel">ระดับความยาก (level) <span class="req">*</span></label>
+              <select id="fieldLevel" name="level" class="control">
+                <option value="">-- เลือกระดับ --</option>
+                <option value="beginner">Beginner (เริ่มต้น)</option>
+                <option value="intermediate">Intermediate (กลาง)</option>
+                <option value="advanced">Advanced (สูง)</option>
+              </select>
+              <small class="error-msg" data-for="level"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldEquipment">อุปกรณ์ (equipment) <span class="req">*</span></label>
+              <input type="text" id="fieldEquipment" name="equipment" class="control" placeholder="เช่น barbell / dumbbell" autocomplete="off" />
+              <small class="error-msg" data-for="equipment"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldStatus">สถานะ (status)</label>
+              <select id="fieldStatus" name="status" class="control">
+                <option value="active">Active (กำลังใช้งาน)</option>
+                <option value="paused">Paused (พักไว้)</option>
+                <option value="archived">Archived (เก็บถาวร)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldSets">จำนวนเซ็ต (sets) <span class="req">*</span></label>
+              <input type="number" id="fieldSets" name="sets" class="control" min="1" max="20" placeholder="3" />
+              <small class="error-msg" data-for="sets"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldReps">จำนวนครั้ง (reps) <span class="req">*</span></label>
+              <input type="number" id="fieldReps" name="reps" class="control" min="1" max="200" placeholder="12" />
+              <small class="error-msg" data-for="reps"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldDuration">ระยะเวลาค้าง (วินาที)</label>
+              <input type="number" id="fieldDuration" name="duration" class="control" min="0" placeholder="0 = ไม่ค้างเวลา" />
+              <small class="error-msg" data-for="duration"></small>
+            </div>
+
+            <div class="form-group span-2">
+              <label for="fieldDescription">รายละเอียดวิธีทำ (description) <span class="req">*</span></label>
+              <textarea id="fieldDescription" name="description" class="control" rows="3" placeholder="อธิบายขั้นตอนการทำ..."></textarea>
+              <small class="error-msg" data-for="description"></small>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="btnSubmit">💾 บันทึกท่านี้</button>
+            <button type="button" class="btn btn-ghost" id="btnCancelEdit" hidden>✖ ยกเลิกการแก้ไข</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ================= FILTER + LIST ================= -->
+      <section class="panel" id="listPanel">
+        <div class="panel-head">
+          <h2>📋 รายการท่าออกกำลังกาย</h2>
+          <p class="panel-sub">กรองตามกลุ่มกล้ามเนื้อ / ระดับความยาก / ค้นหาชื่อ</p>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-field">
+            <label for="filterMuscle">กลุ่มกล้ามเนื้อ</label>
+            <select id="filterMuscle" class="control">
+              <option value="all">ทั้งหมด</option>
+              <option value="chest">Chest (อก)</option>
+              <option value="back">Back (หลัง)</option>
+              <option value="legs">Legs (ขา)</option>
+              <option value="core">Core (แกนกลางลำตัว)</option>
+              <option value="shoulders">Shoulders (ไหล่)</option>
+              <option value="arms">Arms (แขน)</option>
+              <option value="full-body">Full Body (ทั้งตัว)</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="filterLevel">ระดับความยาก</label>
+            <select id="filterLevel" class="control">
+              <option value="all">ทั้งหมด</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="filterStatus">สถานะ</label>
+            <select id="filterStatus" class="control">
+              <option value="all">ทั้งหมด</option>
+              <option value="active">Active</option>
+              <option value="paused">Paused</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+
+          <div class="filter-field grow">
+            <label for="filterSearch">ค้นหา</label>
+            <input type="search" id="filterSearch" class="control" placeholder="ค้นหาชื่อท่า หรืออุปกรณ์..." autocomplete="off" />
+          </div>
+
+          <button type="button" class="btn btn-ghost" id="btnResetFilter">↺ ล้างตัวกรอง</button>
+        </div>
+
+        <div class="chip-row" id="activeFilters"></div>
+
+        <div class="list-status">
+          <span id="listCount">กำลังโหลดข้อมูล...</span>
+        </div>
+
+        <div class="card-grid" id="workoutList"></div>
+      </section>
+
+    </main>
+
+    <footer class="app-footer">
+      <p>Workout Routine Catalog &mdash; Node.js + Express + Vanilla JS &mdash; Memory DB (ข้อมูลจะรีเซ็ตเมื่อปิดเซิร์ฟเวอร์)</p>
+    </footer>
+  </div>
+
+  <!-- ================= TOAST ================= -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- ================= CONFIRM MODAL ================= -->
+  <div class="modal-backdrop" id="confirmModal" hidden>
+    <div class="modal">
+      <h3>⚠️ ยืนยันการลบ</h3>
+      <p id="confirmText">คุณแน่ใจหรือไม่?</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="confirmCancel">ยกเลิก</button>
+        <button type="button" class="btn btn-danger" id="confirmOk">ลบเลย</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -281,7 +281,7 @@ curl -X DELETE http://localhost:3000/api/workouts/999 # -> 404 Not Found
 
 ---
 
-## 11. ปัญหาที่พบบ่าง (Known Issues & Future Improvements)
+## 10. ปัญหาที่พบบ่าง (Known Issues & Future Improvements)
 
 **ข้อจำกัดของเวอร์ชันนี้**
 - ใช้ In-Memory DB ข้อมูลหายทั้งหมดเมื่อปิดเซิร์ฟเวอร์

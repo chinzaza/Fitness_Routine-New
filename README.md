@@ -10,10 +10,10 @@
 ## หลักฐานการดีบัก
 
 ### Debug 1 - API Health
-![Debug 1](.\image\debug1.png)
+![Debug 1](./image\debug1.png)
 
 ### Debug 2 - ผลการทดสอบระบบ
-![Debug 2](.\image\debug2.png)
+![Debug 2](./image\debug2.png)
 
 ระบบยืม-คืนหนังสือห้องสมุด (Mini Project)
 ---
